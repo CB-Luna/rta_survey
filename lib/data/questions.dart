@@ -33,6 +33,7 @@ final List<Map<String, dynamic>> questions = [
   {
     "question":
         "Please provide the following information to take advantage of free install (\$99 value) when signing up for service",
+    "options": []
   }
 ];
 

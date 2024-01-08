@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: defaultTheme,
         home: const Scaffold(
-          body: Survey(),
+          body: SingleChildScrollView(child: Survey()),
         ));
   }
 }

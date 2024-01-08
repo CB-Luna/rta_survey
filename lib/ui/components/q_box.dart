@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class QBox extends StatefulWidget {
-  const QBox(
+  QBox(
       {Key? key,
       required this.question,
       required this.questionNumber,
@@ -10,7 +10,7 @@ class QBox extends StatefulWidget {
 
   final dynamic question;
   final int questionNumber;
-  final int selectedOption;
+  int selectedOption;
 
   @override
   State<QBox> createState() => _QBoxState();
@@ -19,39 +19,79 @@ class QBox extends StatefulWidget {
 class _QBoxState extends State<QBox> {
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Row(
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            alignment: Alignment.center,
-            width: 35,
-            height: 35,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: Color(0xff2097f3)),
-            child: Text(widget.questionNumber.toString(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400)),
+          Row(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                width: 35,
+                height: 35,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Color(0xff2097f3)),
+                child: Text(widget.questionNumber.toString(),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w400)),
+              ),
+              const SizedBox(width: 10.0),
+              Flexible(
+                child: Text(widget.question["question"],
+                    style: const TextStyle(
+                        fontSize: 17.0, fontWeight: FontWeight.w800)),
+              )
+            ],
           ),
-          const SizedBox(width: 10.0),
-          Text(widget.question["question"],
-              style:
-                  const TextStyle(fontSize: 17.0, fontWeight: FontWeight.w800))
-        ],
-      ),
-      Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[500],
-            ),
-            margin: const EdgeInsets.all(35 / 2),
-            width: 1,
-            height: 100,
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[500],
+                ),
+                margin: const EdgeInsets.all(35 / 2),
+                width: 1,
+                height: 120,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (dynamic ans in widget.question["options"])
+                    Row(
+                      children: [
+                        Radio(
+                          fillColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.primary),
+                          value: widget.question["options"].indexOf(ans) + 1,
+                          groupValue: widget.selectedOption,
+                          onChanged: (value) {
+                            setState(() {
+                              widget.selectedOption = value as int;
+                            });
+                            print(widget.selectedOption);
+                          },
+                        ),
+                        TapRegion(
+                          onTapInside: (event) {
+                            setState(() {
+                              widget.selectedOption =
+                                  widget.question["options"].indexOf(ans) + 1;
+                            });
+                          },
+                          child: Text(ans,
+                              style: TextStyle(
+                                  fontSize: 17.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Theme.of(context).primaryColor)),
+                        ),
+                      ],
+                    )
+                ],
+              )
+            ],
           )
-        ],
-      )
-    ]);
+        ]);
   }
 }
