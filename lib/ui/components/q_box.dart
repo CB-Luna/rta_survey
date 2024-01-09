@@ -1,3 +1,5 @@
+import 'package:encuesta_rta/data/constants.dart';
+import 'package:encuesta_rta/ui/components/text_form.dart';
 import 'package:flutter/material.dart';
 
 class QBox extends StatefulWidget {
@@ -42,7 +44,7 @@ class _QBoxState extends State<QBox> {
                 child: Text(widget.question["question"],
                     style: const TextStyle(
                         fontSize: 17.0, fontWeight: FontWeight.w800)),
-              )
+              ),
             ],
           ),
           Row(
@@ -53,11 +55,16 @@ class _QBoxState extends State<QBox> {
                 ),
                 margin: const EdgeInsets.all(35 / 2),
                 width: 1,
-                height: 120,
+                height: widget.question["options"].length == 0 ? 0 : 130,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (widget.question["options"].length == 0)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: TextForm(),
+                    ),
                   for (dynamic ans in widget.question["options"])
                     Row(
                       children: [
@@ -81,8 +88,9 @@ class _QBoxState extends State<QBox> {
                             });
                           },
                           child: Text(ans,
+                              softWrap: true,
                               style: TextStyle(
-                                  fontSize: 17.0,
+                                  fontSize: mobile(context) ? 15.0 : 17.0,
                                   fontWeight: FontWeight.w400,
                                   color: Theme.of(context).primaryColor)),
                         ),

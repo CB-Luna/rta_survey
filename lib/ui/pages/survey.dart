@@ -1,3 +1,4 @@
+import 'package:encuesta_rta/data/constants.dart';
 import 'package:encuesta_rta/data/questions.dart';
 import 'package:encuesta_rta/ui/components/q_box.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,8 @@ class _SurveyState extends State<Survey> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20),
+      padding: EdgeInsets.symmetric(
+          horizontal: mobile(context) ? 20 : 40.0, vertical: 20),
       alignment: Alignment.center,
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
