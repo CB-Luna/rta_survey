@@ -95,7 +95,7 @@ class _SurveyState extends State<Survey> {
                           loading = true;
                         });
                         final answers = context.read<Answers>().answers;
-                        dynamic q1Res = await supabase
+                        await supabase
                             .schema("rta_surveys")
                             .from("survey_answers")
                             .insert({"survey_id": 1});
@@ -106,7 +106,7 @@ class _SurveyState extends State<Survey> {
                             .order("id", ascending: false)
                             .limit(1);
                         final survID = lastSurvey[0]["id"];
-                        dynamic insRes = await supabase
+                        await supabase
                             .schema("rta_surveys")
                             .from("answers")
                             .insert([
