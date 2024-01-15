@@ -83,13 +83,16 @@ class _QBoxState extends State<QBox> {
             children: [
               Row(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[500],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[500],
+                      ),
+                      margin: const EdgeInsets.all(35 / 2),
+                      width: 1,
+                      height: widget.question["options"].length == 0 ? 0 : 130,
                     ),
-                    margin: const EdgeInsets.all(35 / 2),
-                    width: 1,
-                    height: widget.question["options"].length == 0 ? 0 : 130,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
