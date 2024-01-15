@@ -1,7 +1,9 @@
 import 'package:encuesta_rta/data/constants.dart';
 import 'package:encuesta_rta/data/questions.dart';
+import 'package:encuesta_rta/providers/answers.dart';
 import 'package:encuesta_rta/ui/components/q_box.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Survey extends StatefulWidget {
   const Survey({Key? key}) : super(key: key);
@@ -12,6 +14,10 @@ class Survey extends StatefulWidget {
 
 class _SurveyState extends State<Survey> {
   late List<dynamic> answers;
+
+  bool surveyCompleted = false;
+  bool loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -20,27 +26,120 @@ class _SurveyState extends State<Survey> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: mobile(context) ? 20 : 40.0, vertical: 20),
-      alignment: Alignment.center,
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...questions
-                .map((q) => QBox(
-                      question: q,
-                      questionNumber: questions.indexOf(q) + 1,
-                      selectedOption: answers[questions.indexOf(q)],
-                    ))
-                .toList(),
-            TapRegion(
-                onTapInside: (event) {
-                  print(answers);
-                },
-                child: Text("Submit"))
-          ]),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 800,
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: mobile(context) ? 20 : 40.0, vertical: 20),
+          alignment: Alignment.center,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(
+                  "https://strapi.rtatel.com/uploads/UI_00_RTA_logo_b337351d42.png",
+                  width: 300,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                  child: Column(
+                    children: [
+                      Text("Rice/Wheat Ln Fiber to the Home Survey",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 10),
+                      const Text(
+                          "RTA wants to bring fiber to your home with speeds up to 1 gigabit. Before making the investment in the neighborhood, we want to gauge your interest in this new service. RTA is local to your area. We have techs who live in Winnie and Fannett. Our office is located in Crystal Beach. Please fill out this brief survey and let us know how you feel about lightning-fast internet becoming available at your home. There will also be an opportunity to provide your information to take advantage of free install if you are interested in becoming a customer. We look forward to hearing from you.")
+                    ],
+                  ),
+                ),
+                ...questions
+                    .map((q) => QBox(
+                          question: q,
+                          questionNumber: questions.indexOf(q) + 1,
+                          selectedOption: answers[questions.indexOf(q)],
+                        ))
+                    .toList(),
+                const SizedBox(height: 20),
+                if (surveyCompleted) ...[
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: const Text(
+                        "Thank you for taking the time to fill out the survey. If you provided your contact information, someone will be reaching out to you soon!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w400)),
+                  ),
+                ],
+                MouseRegion(
+                  cursor: !surveyCompleted
+                      ? SystemMouseCursors.click
+                      : SystemMouseCursors.basic,
+                  child: GestureDetector(
+                      onTap: () async {
+                        if (surveyCompleted) return;
+                        setState(() {
+                          loading = true;
+                        });
+                        final answers = context.read<Answers>().answers;
+                        dynamic q1Res = await supabase
+                            .schema("rta_surveys")
+                            .from("survey_answers")
+                            .insert({"survey_id": 1});
+                        dynamic lastSurvey = await supabase
+                            .schema("rta_surveys")
+                            .from("survey_answers")
+                            .select("id")
+                            .order("id", ascending: false)
+                            .limit(1);
+                        final survID = lastSurvey[0]["id"];
+                        dynamic insRes = await supabase
+                            .schema("rta_surveys")
+                            .from("answers")
+                            .insert([
+                          for (var a in answers)
+                            {
+                              "question_id": a["id"],
+                              "answer": a["value"],
+                              "survey_answers_id": survID
+                            }
+                        ]);
+                        setState(() {
+                          loading = false;
+                        });
+                        surveyCompleted = true;
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 20.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: !surveyCompleted
+                                ? Theme.of(context).colorScheme.secondary
+                                : Colors.grey,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: Text(
+                              loading
+                                  ? "Loading..."
+                                  : surveyCompleted
+                                      ? "Completed!"
+                                      : "Submit",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              )))),
+                )
+              ]),
+        ),
+      ),
     );
   }
 }

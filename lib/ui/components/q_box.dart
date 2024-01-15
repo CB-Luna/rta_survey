@@ -1,6 +1,10 @@
 import 'package:encuesta_rta/data/constants.dart';
+import 'package:encuesta_rta/data/questions.dart';
+import 'package:encuesta_rta/providers/answers.dart';
+import 'package:encuesta_rta/ui/components/text_box.dart';
 import 'package:encuesta_rta/ui/components/text_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class QBox extends StatefulWidget {
   QBox(
@@ -21,6 +25,17 @@ class QBox extends StatefulWidget {
 class _QBoxState extends State<QBox> {
   @override
   Widget build(BuildContext context) {
+    final answersProvider = context.read<Answers>();
+    void selectOption(int option) {
+      setState(() {
+        widget.selectedOption = option;
+      });
+      answersProvider.addAnswer({
+        "id": widget.question["id"],
+        "value": widget.question["options"][option - 1],
+      });
+    }
+
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,7 +80,7 @@ class _QBoxState extends State<QBox> {
                       padding: EdgeInsets.only(top: 20),
                       child: TextForm(),
                     ),
-                  for (dynamic ans in widget.question["options"])
+                  for (dynamic ans in widget.question["options"]) ...[
                     Row(
                       children: [
                         Radio(
@@ -74,18 +89,13 @@ class _QBoxState extends State<QBox> {
                           value: widget.question["options"].indexOf(ans) + 1,
                           groupValue: widget.selectedOption,
                           onChanged: (value) {
-                            setState(() {
-                              widget.selectedOption = value as int;
-                            });
-                            print(widget.selectedOption);
+                            selectOption(value as int);
                           },
                         ),
                         TapRegion(
                           onTapInside: (event) {
-                            setState(() {
-                              widget.selectedOption =
-                                  widget.question["options"].indexOf(ans) + 1;
-                            });
+                            selectOption(
+                                widget.question["options"].indexOf(ans) + 1);
                           },
                           child: Text(ans,
                               softWrap: true,
@@ -95,7 +105,19 @@ class _QBoxState extends State<QBox> {
                                   color: Theme.of(context).primaryColor)),
                         ),
                       ],
-                    )
+                    ),
+                    if (widget.selectedOption == 4 &&
+                        widget.question["options"].indexOf(ans) == 3 &&
+                        widget.questionNumber == 3)
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: TextBox(
+                            label: widget.question["followUp"],
+                            hint: widget.question["followUp"],
+                            icon: Icons.question_mark,
+                            qID: "4",
+                          ))
+                  ]
                 ],
               )
             ],

@@ -1,8 +1,10 @@
 import 'package:encuesta_rta/data/constants.dart';
+import 'package:encuesta_rta/providers/answers.dart';
 import 'package:encuesta_rta/ui/components/custom_inputs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
 
 class TextBox extends StatefulWidget {
   const TextBox(
@@ -10,6 +12,7 @@ class TextBox extends StatefulWidget {
       required this.label,
       required this.hint,
       required this.icon,
+      required this.qID,
       this.keyboardType = TextInputType.text,
       this.isEmail = false,
       this.isPhone = false})
@@ -18,6 +21,7 @@ class TextBox extends StatefulWidget {
   final String label;
   final String hint;
   final IconData icon;
+  final String qID;
   final bool isEmail;
   final bool isPhone;
   final TextInputType keyboardType;
@@ -34,6 +38,11 @@ class _TextBoxState extends State<TextBox> {
     return SizedBox(
         width: mobile(context) ? 230 : 300,
         child: TextField(
+            onChanged: (value) {
+              context
+                  .read<Answers>()
+                  .addAnswer({"id": widget.qID, "value": value});
+            },
             inputFormatters: [
               widget.isEmail
                   ? MaskTextInputFormatter(

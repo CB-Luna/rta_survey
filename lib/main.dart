@@ -1,9 +1,20 @@
+import 'package:encuesta_rta/data/constants.dart';
+import 'package:encuesta_rta/providers/answers.dart';
 import 'package:encuesta_rta/ui/pages/survey.dart';
 import 'package:encuesta_rta/ui/theme/theme_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  await Supabase.initialize(
+    url: supabaseUrl,
+    anonKey: anonKey,
+  );
+  runApp(ChangeNotifierProvider(
+    create: (context) => Answers(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,8 +27,10 @@ class MyApp extends StatelessWidget {
         title: 'RTA Survey',
         debugShowCheckedModeBanner: false,
         theme: defaultTheme,
-        home: const Scaffold(
-          body: SingleChildScrollView(child: Survey()),
+        home: Consumer<Answers>(
+          builder: (context, value, child) => const Scaffold(
+            body: SingleChildScrollView(child: Survey()),
+          ),
         ));
   }
 }

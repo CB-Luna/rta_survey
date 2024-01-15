@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 class Answers extends ChangeNotifier {
-  List<String> _answers = [];
+  List<Map<String, String>> _answers = [];
 
-  List<String> get answers => _answers;
+  List<Map<String, String>> get answers => _answers;
 
-  set answers(List<String> answers) {
-    _answers = answers;
-    notifyListeners();
-  }
-
-  void addAnswer(String answer) {
+  void addAnswer(Map<String, String> answer) {
+    // check if answer exist
+    if (_answers.any((element) => element["id"] == answer["id"])) {
+      _answers.removeWhere((element) => element["id"] == answer["id"]);
+    }
+    // add answer
     _answers.add(answer);
     notifyListeners();
   }
 
-  void removeAnswer(String answer) {
-    _answers.remove(answer);
+  void removeAnswer(String answerID) {
+    _answers.remove(_answers.firstWhere((answer) => answer["id"] == answerID));
     notifyListeners();
   }
 }

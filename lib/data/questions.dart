@@ -1,7 +1,8 @@
 final List<Map<String, dynamic>> questions = [
   {
+    "id": "1",
     "question":
-        "Question 1: If fiber service is available to your home, which plan makes the most sense for you?",
+        "If fiber service is available to your home, which plan makes the most sense for you?",
     "options": [
       "300Mbs for \$48 a month",
       "500Mbs for \$68 per month",
@@ -9,8 +10,9 @@ final List<Map<String, dynamic>> questions = [
     ],
   },
   {
+    "id": "2",
     "question":
-        "Question 2: If fiber to the home was offered in the next 90 days to your home, how likely would you be to sign up for service?",
+        "If fiber to the home was offered in the next 90 days to your home, how likely would you be to sign up for service?",
     "options": [
       "Definitely would sign up",
       "Likely to sign up",
@@ -19,8 +21,8 @@ final List<Map<String, dynamic>> questions = [
     ],
   },
   {
-    "question":
-        "Question 3: How quickly would you sign-up if service becomes available?",
+    "id": "3",
+    "question": "How quickly would you sign-up if service becomes available?",
     "options": [
       "Put me on the preinstall list now!",
       "Immediately once service is active.",

@@ -13,12 +13,14 @@ class TextForm extends StatelessWidget {
           hint: "Name",
           icon: Icons.person,
           label: "Name",
+          qID: "5",
         ),
         SizedBox(height: 20),
         TextBox(
           hint: "Address",
           icon: Icons.location_on,
           label: "Address",
+          qID: "6",
         ),
         SizedBox(height: 20),
         TextBox(
@@ -26,6 +28,7 @@ class TextForm extends StatelessWidget {
           icon: Icons.phone,
           label: "Phone Number",
           isPhone: true,
+          qID: "7",
         ),
         SizedBox(height: 20),
         TextBox(
@@ -33,12 +36,14 @@ class TextForm extends StatelessWidget {
           icon: Icons.email,
           label: "Email address",
           isEmail: true,
+          qID: "8",
         ),
         SizedBox(height: 20),
         TextBox(
           hint: "Best time to contact you",
           icon: Icons.access_time,
           label: "Best time to contact you",
+          qID: "9",
         ),
       ],
     ));
