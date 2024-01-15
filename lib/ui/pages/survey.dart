@@ -18,16 +18,19 @@ class _SurveyState extends State<Survey> {
   bool surveyCompleted = false;
   bool loading = false;
 
+  List<ExpansionTileController> tileControllers = [];
+
   @override
   void initState() {
     super.initState();
     answers = questions.map((q) => 0).toList();
+
+    tileControllers =
+        questions.map((q) => ExpansionTileController()).toList(growable: false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final tileControllers =
-        questions.map((q) => ExpansionTileController()).toList(growable: false);
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(

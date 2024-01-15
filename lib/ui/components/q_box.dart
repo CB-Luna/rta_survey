@@ -52,8 +52,9 @@ class _QBoxState extends State<QBox> {
                   alignment: Alignment.center,
                   width: 35,
                   height: 35,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xff2097f3)),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.secondary),
                   child: Text(widget.questionNumber.toString(),
                       style: const TextStyle(
                           color: Colors.white,
@@ -66,7 +67,7 @@ class _QBoxState extends State<QBox> {
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 17.0,
-                          fontWeight: FontWeight.w800)),
+                          fontWeight: FontWeight.w600)),
                 ),
                 Text(
                   "*",
