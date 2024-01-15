@@ -17,6 +17,7 @@ class _SurveyState extends State<Survey> {
 
   bool surveyCompleted = false;
   bool loading = false;
+  bool error = false;
 
   List<ExpansionTileController> tileControllers = [];
 
@@ -84,14 +85,30 @@ class _SurveyState extends State<Survey> {
                             fontSize: 16, fontWeight: FontWeight.w400)),
                   ),
                 ],
+                if (error) ...[
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: Text("Please fill all the required (*) fields",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400)),
+                  ),
+                ],
                 MouseRegion(
                   cursor: !surveyCompleted
                       ? SystemMouseCursors.click
                       : SystemMouseCursors.basic,
                   child: GestureDetector(
                       onTap: () async {
+                        setState(() {
+                          error = context.read<Answers>().answers.length < 8;
+                        });
+                        if (error) return;
                         if (surveyCompleted) return;
                         setState(() {
+                          error = false;
                           loading = true;
                         });
                         final answers = context.read<Answers>().answers;
