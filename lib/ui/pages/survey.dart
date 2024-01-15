@@ -26,6 +26,8 @@ class _SurveyState extends State<Survey> {
 
   @override
   Widget build(BuildContext context) {
+    final tileControllers =
+        questions.map((q) => ExpansionTileController()).toList(growable: false);
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(
@@ -63,6 +65,7 @@ class _SurveyState extends State<Survey> {
                 ...questions
                     .map((q) => QBox(
                           question: q,
+                          tileControllers: tileControllers,
                           questionNumber: questions.indexOf(q) + 1,
                           selectedOption: answers[questions.indexOf(q)],
                         ))
