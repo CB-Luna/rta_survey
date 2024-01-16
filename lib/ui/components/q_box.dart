@@ -8,30 +8,30 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class QBox extends StatefulWidget {
-  QBox(
-      {Key? key,
-      required this.question,
-      required this.questionNumber,
-      required this.tileControllers,
-      required this.selectedOption})
-      : super(key: key);
+  QBox({
+    Key? key,
+    required this.question,
+    required this.questionNumber,
+    required this.tileControllers,
+  }) : super(key: key);
 
   final dynamic question;
   final int questionNumber;
   final List<ExpansionTileController> tileControllers;
-  int selectedOption;
 
   @override
   State<QBox> createState() => _QBoxState();
 }
 
 class _QBoxState extends State<QBox> {
+  int selectedOption = 0;
+
   @override
   Widget build(BuildContext context) {
     final answersProvider = context.read<Answers>();
     void selectOption(int option) {
       setState(() {
-        widget.selectedOption = option;
+        selectedOption = option;
       });
       answersProvider.addAnswer({
         "id": widget.question["id"],
@@ -110,7 +110,7 @@ class _QBoxState extends State<QBox> {
                                   Theme.of(context).colorScheme.primary),
                               value:
                                   widget.question["options"].indexOf(ans) + 1,
-                              groupValue: widget.selectedOption,
+                              groupValue: selectedOption,
                               onChanged: (value) {
                                 selectOption(value as int);
                               },
@@ -130,7 +130,7 @@ class _QBoxState extends State<QBox> {
                             ),
                           ],
                         ),
-                        if (widget.selectedOption == 4 &&
+                        if (selectedOption == 4 &&
                             widget.question["options"].indexOf(ans) == 3 &&
                             widget.questionNumber == 3)
                           Padding(

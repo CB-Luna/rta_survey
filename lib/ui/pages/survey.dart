@@ -71,7 +71,6 @@ class _SurveyState extends State<Survey> {
                           question: q,
                           tileControllers: tileControllers,
                           questionNumber: questions.indexOf(q) + 1,
-                          selectedOption: answers[questions.indexOf(q)],
                         ))
                     .toList(),
                 const SizedBox(height: 20),
