@@ -42,6 +42,10 @@ class _TextBoxState extends State<TextBox> {
               context
                   .read<Answers>()
                   .addAnswer({"id": widget.qID, "value": value});
+
+              if (value == "") {
+                context.read<Answers>().removeAnswer(widget.qID);
+              }
             },
             inputFormatters: [
               widget.isEmail

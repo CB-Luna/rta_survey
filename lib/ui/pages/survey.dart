@@ -21,6 +21,37 @@ class _SurveyState extends State<Survey> {
 
   List<ExpansionTileController> tileControllers = [];
 
+  void requiredFields() {
+    final provAnswers = context.read<Answers>().answers;
+
+    List<String> requiredIDs = [
+      "1",
+      "2",
+      "3",
+      "5",
+      "6",
+      "9",
+      if (provAnswers.firstWhere((element) => element["id"] == "3")["value"] ==
+          "More than 3 months")
+        "4"
+    ];
+
+    for (var id in requiredIDs) {
+      if (!provAnswers.any((e) => e["id"] == id)) {
+        setState(() {
+          error = true;
+        });
+        return;
+      }
+    }
+
+    if (!provAnswers.any((e) => e["id"] == "7" || e["id"] == "8")) {
+      setState(() {
+        error = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -101,9 +132,12 @@ class _SurveyState extends State<Survey> {
                       : SystemMouseCursors.basic,
                   child: GestureDetector(
                       onTap: () async {
+                        print(context.read<Answers>().answers);
                         setState(() {
-                          error = context.read<Answers>().answers.length < 8;
+                          error = context.read<Answers>().answers.length < 3;
                         });
+                        if (error) return;
+                        requiredFields();
                         if (error) return;
                         if (surveyCompleted) return;
                         setState(() {
