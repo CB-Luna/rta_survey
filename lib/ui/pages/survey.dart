@@ -132,7 +132,6 @@ class _SurveyState extends State<Survey> {
                       : SystemMouseCursors.basic,
                   child: GestureDetector(
                       onTap: () async {
-                        print(context.read<Answers>().answers);
                         setState(() {
                           error = context.read<Answers>().answers.length < 3;
                         });
