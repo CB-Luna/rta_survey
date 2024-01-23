@@ -78,6 +78,9 @@ ThemeData defaultTheme = ThemeData(
       error: Color(0xFFDB004D),
       onError: Color(0xA1DB004D),
     ),
+    scrollbarTheme: ScrollbarThemeData(
+      thumbColor: MaterialStateProperty.all(colorPrimary),
+    ),
 
     /////
     textTheme: TextTheme(

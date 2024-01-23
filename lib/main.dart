@@ -13,12 +13,13 @@ Future<void> main() async {
   );
   runApp(ChangeNotifierProvider(
     create: (context) => Answers(),
-    child: const MyApp(),
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final ScrollController controller = ScrollController();
 
   // This widget is the root of your application.
   @override
@@ -28,8 +29,14 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: defaultTheme,
         home: Consumer<Answers>(
-          builder: (context, value, child) => const Scaffold(
-            body: SingleChildScrollView(child: Survey()),
+          builder: (context, value, child) => Scaffold(
+            body: Scrollbar(
+              thumbVisibility: true,
+              thickness: 10,
+              controller: controller,
+              child: SingleChildScrollView(
+                  controller: controller, child: const Survey()),
+            ),
           ),
         ));
   }
