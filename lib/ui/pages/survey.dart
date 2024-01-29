@@ -93,7 +93,7 @@ class _SurveyState extends State<Survey> {
                               fontWeight: FontWeight.w600)),
                       const SizedBox(height: 10),
                       const Text(
-                          "RTA wants to bring fiber to your home with speeds up to 1 gigabit. Before making the investment in the neighborhood, we want to gauge your interest in this new service. RTA is local to your area. We have techs who live in Winnie and Fannett. Our office is located in Crystal Beach. Please fill out this brief survey and let us know how you feel about lightning-fast internet becoming available at your home. There will also be an opportunity to provide your information to take advantage of free install if you are interested in becoming a customer. We look forward to hearing from you.")
+                          "Are you interested in getting gigFAST INTERNET® FIBER to your home with symmetrical speeds up to 1 gig?  We are local and would love to hear your opinion, please see the short survey below.  By filling out the survey we will offer you a free installation worth \$99.  Thank you and we look forward to hearing you.")
                     ],
                   ),
                 ),
@@ -132,6 +132,12 @@ class _SurveyState extends State<Survey> {
                       : SystemMouseCursors.basic,
                   child: GestureDetector(
                       onTap: () async {
+                        final a = await supabase
+                            .schema("rta_surveys")
+                            .from("survey_answers")
+                            .select("*");
+                        print(a);
+                        return;
                         setState(() {
                           error = context.read<Answers>().answers.length < 3;
                         });
