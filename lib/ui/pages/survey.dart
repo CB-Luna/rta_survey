@@ -132,12 +132,6 @@ class _SurveyState extends State<Survey> {
                       : SystemMouseCursors.basic,
                   child: GestureDetector(
                       onTap: () async {
-                        final a = await supabase
-                            .schema("rta_surveys")
-                            .from("survey_answers")
-                            .select("*");
-                        print(a);
-                        return;
                         setState(() {
                           error = context.read<Answers>().answers.length < 3;
                         });
